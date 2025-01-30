@@ -22,6 +22,17 @@
     <div class="container">
         <h1>File Upload & Download</h1>
 
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
         <!-- File Upload Form -->
         <form action="/upload" method="post" enctype="multipart/form-data">
             <label for="file">Choose a file to upload:</label><br>
