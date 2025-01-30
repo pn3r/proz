@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload & Download</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        input[type="file"], button {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>File Upload & Download</h1>
+
+        <!-- File Upload Form -->
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <label for="file">Choose a file to upload:</label><br>
+            <input type="file" name="file" id="file" required><br>
+            <button type="submit">Upload</button>
+        </form>
+
+        <hr>
+
+        <!-- File Download Section -->
+        <h2>Download Files</h2>
+        <ul>
+            {% for file in files %}
+                <li><a href="/download/{{ file }}">{{ file }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
