@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share by me</title>
+    <style>
+        /* Background */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url("{{ url_for('static', filename='background.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Container */
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* File input & buttons */
+        input[type="file"], button {
+            margin: 10px 0;
+        }
+
+        /* File list */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        /* Delete button */
+        .delete-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 2px 4px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .delete-btn:hover {
+            background-color: darkred;
+        }
+
+        /* Storage info */
+        .storage-info {
+            margin-top: 18px;
+            font-size: 14px;
+        }
+
+        /* Log Box (Jar Effect) */
+        .log-box {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 20px;
+            color: green;
+            font-family: monospace;
+            display: none;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px rgba(255, 255, 255, 0.4);
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Jar Lid Effect */
+        .log-box::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 60%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            transform: translateX(-50%);
+            box-shadow: 0px 2px 8px rgba(255, 255, 255, 0.6);
+        }
+
+        /* Log Button */
+        .log-btn {
+            margin-top: 10px;
+            background-color: white;
+            color: black;
+            border: none;
+            padding: 2px 4px;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0px 2px 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .log-btn:hover {
+            background-color: lightgray;
+        }
+
+        /* Log List */
+        .log-list {
+            text-align: left;
+            padding: 0;
+        }
+
+        .log-list p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Share By Me.ðŸ¤</h1>
+
+        <!-- Upload Form -->
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <label for="file">Choose a file to upload:</label><br>
+            <input type="file" name="file" id="file" required><br>
+            <button type="submit">Upload</button>
+        </form>
+
+        <hr>
+
+        <!-- Files List -->
+        <h2>Files</h2>
+        <ul>
+            {% for file in files %}
+                <li>
+                    <a href="/download/{{ file.name }}" style="color: white;">{{ file.name }}</a><br>
+                    <span>Size: {{ file.size }} KB</span><br>
+                    <form action="/delete/{{ file.name }}" method="post">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <button id="log-btn" class="log-btn" onclick="toggleLogBox()">Show Logs</button>
+        <div id="log-box" class="log-box">
+            <div class="log-list">
+                {% for log in logs %}
+                    <p>{{ log }}</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="storage-info">
+            <span>Free Space: {{ total_free_space | round(2) }} GB</span>
+        </div>
+    </div>
+
+    <script>
+        function toggleLogBox() {
+            var logBox = document.getElementById('log-box');
+            var logBtn = document.getElementById('log-btn');
+            logBox.style.display = logBox.style.display === 'none' ? 'block' : 'none';
+            logBtn.textContent = logBox.style.display === 'none' ? 'Show Logs' : 'Hide Logs';
+        }
+    </script>
+</body>
+</html>
